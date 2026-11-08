@@ -6,6 +6,29 @@ A Chrome extension that enhances Fireberry CRM by displaying API field names and
 - Email: idokraicer@gmail.com
 - LinkedIn: https://www.linkedin.com/in/ido-kraicer/
 
+## שדרוג 1.1.0 — התחברות לסביבות
+
+לצד שמות שדות API וערכי picklist, החלונית כוללת כעת **התחברות לסביבות**: שמירת פרטי שותף, ניהול סביבות, ומילוי Partner Access בלחיצה. כלי הצפייה המקוריים נשארים בלשונית **שדות וערכי רשימות**.
+
+### התקנה מהירה ללא build
+
+1. הורידו את `fireberry-picklist-viewer-1.1.0.zip` מתוך [עמוד הגרסה](https://github.com/galeindor/FireberryPicklistOptionViewer/releases/tag/v1.1.0) וחלצו לתיקייה קבועה.
+2. פתחו `chrome://extensions`, הפעילו **Developer mode**, לחצו **Load unpacked** ובחרו בתיקייה שחולצה ובה `manifest.json`.
+3. פתחו את התוסף, בחרו **התחברות לסביבות**, שמרו פרטי שותף והוסיפו סביבה עם שם ומייל לקוח.
+4. לחצו **כניסה** ליד סביבה. התוסף משתמש בכרטיסיית Fireberry הנוכחית, אחרת בכרטיסיית Fireberry קיימת, ופותח חדשה רק כשאין כזו.
+
+**עדכון התקנה קיימת:** אם התוסף המקורי נטען ידנית, החליפו את תוכן התיקייה שממנה הוא נטען בקבצי ה־ZIP החדש, ולחצו Reload. שמירת אותה תיקייה שומרת את זהות התוסף ואת הגדרת הצפייה הקיימת. אם הוא מותקן מחנות Chrome, ה־fork הזה לא מעדכן אותו אוטומטית; אפשר להתקין את הגרסה המשולבת ידנית ולהשבית את הגרסה הישנה כדי למנוע הצגת תוויות כפולות.
+
+**מעבר מהתוסף הנפרד:** סביבות וסיסמאות אינן מועברות אוטומטית בין מזהי תוספים. הגדירו אותן פעם אחת בגרסה המשולבת ואז השביתו את Partner Launcher הנפרד.
+
+**פרטיות:** סביבות ומייל שותף נשמרים ב־`chrome.storage.local`. הסיסמה נשמרת כברירת מחדל ב־`chrome.storage.session` ונמחקת בהפעלה מחדש של Chrome או בטעינה מחדש/עדכון/השבתה של התוסף. שמירה קבועה היא בחירה מפורשת ואינה כספת מוצפנת. פרטי שותף לא נשמרים ב־sync ולא נשלחים לסקריפט הצפייה בעמוד. אפשר למחוק את הסיסמה בחלונית. כל הכרטיסיות באותו פרופיל חולקות סשן Fireberry; אימות נוסף דורש השלמה ידנית.
+
+ל־Claude: הורד את נכס ה־ZIP מעמוד הגרסה, חלץ לתיקייה קבועה, ופעל לפי הוראות ההתקנה לעיל ו־`CLAUDE.md`. המשתמש יזין את פרטי ההתחברות בעצמו בתוך התוסף.
+
+קוד כלי הצפייה המקורי מאת **Ido Kraicer**; שילוב Partner Launcher נוסף ב־fork זה. אין צורך ב־npm או Bun להתקנה מה־ZIP. לבנייה מהמקור ראו למטה; בבנייה יש לטעון את `dist` ולא את שורש המאגר.
+
+---
+
 ## Features
 
 ### 🏷️ Field API Name Display
@@ -45,13 +68,14 @@ A Chrome extension that enhances Fireberry CRM by displaying API field names and
 
 1. **Clone and install dependencies**
    ```bash
-   cd ~/Developer/FireberryPicklistOptionViewer
-   npm install
+   git clone https://github.com/galeindor/FireberryPicklistOptionViewer.git
+   cd FireberryPicklistOptionViewer
+   bun install --frozen-lockfile
    ```
 
 2. **Build the extension**
    ```bash
-   npm run build
+   bun run build
    ```
 
 3. **Load in Chrome**
@@ -180,16 +204,16 @@ copyButton.style.cssText =
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Development mode with HMR
-npm run dev
+bun run dev
 
 # Production build
-npm run build
+bun run build
 
 # Build and reload extension
-npm run build && # reload in chrome://extensions/
+bun run build && # reload in chrome://extensions/
 ```
 
 ## Troubleshooting

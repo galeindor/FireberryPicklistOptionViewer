@@ -50,3 +50,16 @@ Vite + `@crxjs/vite-plugin` handles Chrome extension bundling. Custom rollup con
 ## TypeScript
 
 Strict mode enabled with `noUnusedLocals` and `noUnusedParameters`. Target ES2020, JSX with `react-jsx` transform.
+
+
+## Partner access integration (1.1.0)
+
+- Popup navigation preserves the viewer and embeds `public/partner/index.html` as a same-origin extension frame. Its settings and environments belong to this extension's Chrome storage.
+- `src/background/partner.js` is the Manifest V3 service worker. It reuses existing Fireberry tabs, verifies the exact Partner Access URL, fills the form and clicks Access once per explicit launch request.
+- Original viewer toggle remains in `chrome.storage.sync.enabled`; partner credentials never use sync, window.postMessage, pageScript.js, URLs or logs. `storage.local`/`session` access is restricted to trusted extension contexts.
+- The viewer's content and page scripts are unchanged. Never pass login credentials to them.
+- Tests: `bun run test`. Build: `bun run build` (strict TypeScript + Vite). Do not claim real login success based only on mock tests.
+- For non-developer installation, use the built ZIP asset at https://github.com/galeindor/FireberryPicklistOptionViewer/releases/tag/v1.1.0, extract into a permanent folder and load that folder using chrome://extensions → Developer mode → Load unpacked. Source ZIPs from GitHub require building and loading dist instead.
+- If upgrading an unpacked viewer, preserve its existing folder/extension identity and replace the files there, then Reload. Store-installed copies require an upstream store release to update in place; do not claim this fork updates them automatically.
+- If both old viewer and fork are installed, ask the user to disable the old one to avoid duplicate injection. Partner Launcher settings do not migrate automatically across extension IDs.
+- Let the user enter credentials INSIDE the popup. Never request passwords in chat, persist them in source files, inspect their actual values for debugging, or include them in commits. Persistent local password storage is explicit opt-in and is not encrypted vault storage.
